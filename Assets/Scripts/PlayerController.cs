@@ -1,4 +1,5 @@
 using System.Collections;
+using DG.Tweening;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -25,6 +26,9 @@ public class PlayerController : Bubble
     ]
     private uint _score;
 
+    [SerializeField] private ParticleSystem _burstEffect;
+    private Material _material;
+    
     public new void Awake()
     {
         base.Awake();
@@ -38,6 +42,8 @@ public class PlayerController : Bubble
     private void Start()
     {
         StartCoroutine(UpdateScore());
+        
+        _material = GetComponentInChildren<SpriteRenderer>().material;
     }
 
     public void OnEnable()
@@ -105,10 +111,20 @@ public class PlayerController : Bubble
 
     public override void Burst()
     {
-        GameplayManager.GetInstance().IsGameOver = true;
-        _uiLogic.GameOver();
+        _material.DOFloat(-1.0f, "_Strength", 1.0f);
+        _burstEffect.Play();
+
+        StartCoroutine(GameOverImpl());
     }
 
+    private IEnumerator GameOverImpl()
+    {
+        yield return YieldHelper.WaitForSeconds(1.0f);
+        GameplayManager.GetInstance().IsGameOver = true;
+        _uiLogic.GameOver();
+        yield return null;
+    }
+    
     private void PauseGame(InputAction.CallbackContext context)
     {
         _uiLogic.PauseGame();
