@@ -6,8 +6,11 @@ public class Block : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Bubble"))
         {
-            Destroy(other.gameObject);
-            // Destroy(gameObject);
+            other.gameObject.GetComponent<Bubble>().Burst();
+        }
+        else if (other.gameObject.CompareTag("Player"))
+        {
+            other.gameObject.GetComponent<PlayerController>().Burst();
         }
     }
 }

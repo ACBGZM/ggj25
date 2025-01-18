@@ -52,7 +52,7 @@ public class Bubble : MonoBehaviour
         _scale -= _shrinkRate * Time.deltaTime;
         if (_scale < _minScale)
         {
-            Destroy(gameObject);
+            Burst();
         }
         else
         {
@@ -97,5 +97,11 @@ public class Bubble : MonoBehaviour
         transform.localScale = new Vector3(_scale, _scale, 1);
 
         Destroy(otherBubble.gameObject);
+    }
+
+    public virtual void Burst()
+    {
+        // todo: burst effects
+        Destroy(gameObject);
     }
 }

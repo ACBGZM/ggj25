@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -6,10 +9,10 @@ public class PlayerController : Bubble
 {
     private Rigidbody2D _playerRigidbody2D;
     private InputControl _playerInput;
-    
+
     [SerializeField] private UILogic _uiLogic;
     private InputAction _pauseGameAction;
-    
+
     [SerializeField
 #if UNITY_EDITOR
      , ReadOnly
@@ -17,9 +20,9 @@ public class PlayerController : Bubble
     ]
     private Vector2 _inputMovement;
 
-    [SerializeField]
-    private float _speed;
+    [SerializeField] private float _speed;
 
+    [SerializeField] private uint _score;
 
     public new void Awake()
     {
@@ -29,6 +32,8 @@ public class PlayerController : Bubble
 
         _playerInput = new InputControl();
         _pauseGameAction = _playerInput.GP.Pause;
+
+        StartCoroutine(UpdateScore());
     }
 
     public void OnEnable()
@@ -36,7 +41,7 @@ public class PlayerController : Bubble
         _playerInput.Enable();
         _pauseGameAction.performed += PauseGame;
     }
-    
+
     public void OnDisable()
     {
         _pauseGameAction.performed -= PauseGame;
@@ -47,7 +52,7 @@ public class PlayerController : Bubble
     {
         ProcessInput();
     }
-    
+
     public new void FixedUpdate()
     {
         _expectLifeTime = (_scale - _minScale) / _shrinkRate;
@@ -55,12 +60,12 @@ public class PlayerController : Bubble
         Shrink();
         PlayerMovement();
     }
-    
+
     private void ProcessInput()
     {
         _inputMovement = _playerInput.GP.Move.ReadValue<Vector2>();
     }
-    
+
     private void PlayerMovement()
     {
         CalculateVerticalSpeed();
@@ -70,7 +75,7 @@ public class PlayerController : Bubble
         {
             return;
         }
-        
+
         float2 inputMovement = math.normalize(
             new float2(_inputMovement.x, _verticalSpeed)
         );
@@ -90,11 +95,28 @@ public class PlayerController : Bubble
             transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y,
                 transform.localScale.z);
         }
+
+        _uiLogic.UpdatePlayerInfo($"score: +{_scale * _scale:F1}\nlife: {_expectLifeTime:F1}");
     }
-    
+
+    public override void Burst()
+    {
+        _uiLogic.GameOver();
+    }
+
     private void PauseGame(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
         _uiLogic.PauseGame();
         _uiLogic.SwitchPanel(true);
+    }
+
+    private IEnumerator UpdateScore()
+    {
+        while (true)
+        {
+            yield return YieldHelper.WaitForSeconds(1.0f, true);
+            _score += (uint)Mathf.CeilToInt(_scale * _scale);
+            _uiLogic.UpdateScore(_score);
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class UILogic : MonoBehaviour
 {
@@ -7,8 +8,14 @@ public class UILogic : MonoBehaviour
     [SerializeField] private List<GameObject> _enablePanels;
     [SerializeField] private List<GameObject> _disablePanels;
     [SerializeField] private GameObject _gameOverPanel;
+    [SerializeField] private TMP_Text _gameOverPanelScoreText;
 
     // hud
+    [SerializeField] private TMP_Text _inGameScoreText;
+    [SerializeField] private TMP_Text _inGamePlayerInfoText;
+
+    [SerializeField] private Camera _gameplayCamera;
+    
     public void SwitchPanel(bool enable)
     {
         foreach (GameObject panel in _disablePanels)
@@ -47,5 +54,17 @@ public class UILogic : MonoBehaviour
         PauseGame();
 
         _gameOverPanel.SetActive(true);
+        _gameOverPanelScoreText.text = _inGameScoreText.text;
+
+    }
+    
+    public void UpdateScore(uint score)
+    {
+        _inGameScoreText.text = score.ToString();
+    }
+    
+    public void UpdatePlayerInfo(string info)
+    {
+        _inGamePlayerInfoText.text = info;
     }
 }

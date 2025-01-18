@@ -22,40 +22,47 @@ core gameplay: bubble size
 
 3c
 
-- [ ] player
-  - [ ] [A] a bubble 
-  - [ ] [A] show life time
+- [x] player
+  - [x] [A] a bubble 
+  - [x] [A] show life time
 - [ ] camera:
-  - [ ] [A] follow player
+  - [x] [A] follow player
   - [ ] [B] camera impulse
 - [ ] control
-  - [ ] [A] keyboard (move only horizontally)
+  - [x] [A] keyboard (move only horizontally)
+  - [ ] gamepad
 
 
 
 system
 
-- [ ] ui
-  - [ ] [A] main menu, play button and exit button
-  - [ ] [A] pause menu, resume button and exit button
-- [ ] game loop
-  - [ ] scores ?
-  - [ ] game over
+- [x] ui
+  - [x] [A] main menu, play button and exit button
+  - [x] [A] pause menu, resume button and exit button
+  - [x] hud
+- [x] game loop
+  - [x] scores ?
+  - [x] game over
+- [ ] packaging test
 
 
 
 level
 
-- [ ] bubbles in levels
-- [ ] something contact with bubbles
-- [ ] art
-  - [ ] background
+- [x] bubble spawner
+- [x] something contact with bubbles
 
 
 
 others
 
-- [ ] animations
-  - [ ] [A] bursting
-- [ ] [B] audio
-- [ ] [B] rendering
+- [ ] **design** 
+  - [ ] [A] level design
+    - [ ] fixed area
+    - [ ] shorter life
+- [ ] **art** 
+  - [ ] [A] bursting animations
+  - [ ] [A] main menu art
+  - [ ] [A] bubble(player) art
+  - [ ] [B] level art
+  - [ ] [B] audio
