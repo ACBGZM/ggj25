@@ -31,14 +31,11 @@ public class Bubble : MonoBehaviour
     ]
     protected float _expectLifeTime;
 
-    [SerializeField] protected float _shrinkRate = 0.1f;
-    [SerializeField] protected float _minScale = 0.2f;
-
     public void Awake()
     {
         _initialScale = Random.Range(GameplaySettings.BubbleInitialScaleMin, GameplaySettings.BubbleInitialScaleMax);
         _scale = _initialScale;
-        _expectLifeTime = (_initialScale - _minScale) / _shrinkRate;
+        _expectLifeTime = (_initialScale - GameplaySettings.BubbleMinScale) / GameplaySettings.BubbleShrinkRate;
     }
 
     public void FixedUpdate()
@@ -49,8 +46,8 @@ public class Bubble : MonoBehaviour
 
     protected void Shrink()
     {
-        _scale -= _shrinkRate * Time.deltaTime;
-        if (_scale < _minScale)
+        _scale -= GameplaySettings.BubbleShrinkRate * Time.deltaTime;
+        if (_scale < GameplaySettings.BubbleMinScale)
         {
             Burst();
         }
@@ -70,7 +67,7 @@ public class Bubble : MonoBehaviour
     {
         if (_scale > GameplaySettings.BubbleScaleThreshold)
         {
-            _verticalSpeed = -0.8f * Mathf.Pow(_scale - GameplaySettings.BubbleScaleThreshold, 2);
+            _verticalSpeed = -0.8f * (_scale - GameplaySettings.BubbleScaleThreshold);
         }
         else
         {

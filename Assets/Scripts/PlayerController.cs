@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,9 +18,12 @@ public class PlayerController : Bubble
     ]
     private Vector2 _inputMovement;
 
-    [SerializeField] private float _speed;
-
-    [SerializeField] private uint _score;
+    [SerializeField
+#if UNITY_EDITOR
+     , ReadOnly
+#endif
+    ]
+    private uint _score;
 
     public new void Awake()
     {
@@ -32,7 +33,10 @@ public class PlayerController : Bubble
 
         _playerInput = new InputControl();
         _pauseGameAction = _playerInput.GP.Pause;
+    }
 
+    private void Start()
+    {
         StartCoroutine(UpdateScore());
     }
 
@@ -55,7 +59,7 @@ public class PlayerController : Bubble
 
     public new void FixedUpdate()
     {
-        _expectLifeTime = (_scale - _minScale) / _shrinkRate;
+        _expectLifeTime = (_scale - GameplaySettings.BubbleMinScale) / GameplaySettings.BubbleShrinkRate;
 
         Shrink();
         PlayerMovement();
@@ -70,19 +74,19 @@ public class PlayerController : Bubble
     {
         CalculateVerticalSpeed();
         _verticalSpeed *= 0.5f;
+        _verticalSpeed = Mathf.Clamp(_verticalSpeed, -1.0f, GameplaySettings.PlayerVerticalMaxSpeed);
 
         if (_inputMovement.x == 0 && _verticalSpeed == 0)
         {
             return;
         }
 
-        float2 inputMovement = math.normalize(
-            new float2(_inputMovement.x, _verticalSpeed)
-        );
-        float speed = _speed;
+        Vector2 inputMovement = new Vector2(_inputMovement.x, _verticalSpeed).normalized;
+        float verticalIndex = Mathf.Clamp01(_scale - GameplaySettings.BubbleScaleThreshold) + 1;
+        
         _playerRigidbody2D.MovePosition(
             _playerRigidbody2D.position
-            + speed * Time.deltaTime * new Vector2(inputMovement.x, _verticalSpeed)
+            + Time.deltaTime * new Vector2(verticalIndex * GameplaySettings.PlayerHorizontalSpeed * inputMovement.x, _verticalSpeed)
         );
 
         if (_inputMovement.x > 0)
@@ -101,10 +105,11 @@ public class PlayerController : Bubble
 
     public override void Burst()
     {
+        GameplayManager.GetInstance().IsGameOver = true;
         _uiLogic.GameOver();
     }
 
-    private void PauseGame(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    private void PauseGame(InputAction.CallbackContext context)
     {
         _uiLogic.PauseGame();
         _uiLogic.SwitchPanel(true);
@@ -112,11 +117,13 @@ public class PlayerController : Bubble
 
     private IEnumerator UpdateScore()
     {
-        while (true)
+        while (!GameplayManager.GetInstance().IsGameOver)
         {
             yield return YieldHelper.WaitForSeconds(1.0f, true);
             _score += (uint)Mathf.CeilToInt(_scale * _scale);
             _uiLogic.UpdateScore(_score);
         }
+
+        yield return null;
     }
 }
