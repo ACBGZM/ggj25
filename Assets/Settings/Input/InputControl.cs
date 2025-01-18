@@ -53,6 +53,15 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""4eb38ef9-a9b1-4be4-9605-02179e5ed0c8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -273,6 +282,28 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""XR"",
                     ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d439c5ec-3c16-42ff-8879-1eac9a845479"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""835aec1a-94b4-4732-becc-8e85ba56747e"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -863,6 +894,7 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
         m_GP_Move = m_GP.FindAction("Move", throwIfNotFound: true);
         m_GP_Look = m_GP.FindAction("Look", throwIfNotFound: true);
         m_GP_Fire = m_GP.FindAction("Fire", throwIfNotFound: true);
+        m_GP_Pause = m_GP.FindAction("Pause", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -939,6 +971,7 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
     private readonly InputAction m_GP_Move;
     private readonly InputAction m_GP_Look;
     private readonly InputAction m_GP_Fire;
+    private readonly InputAction m_GP_Pause;
     public struct GPActions
     {
         private @InputControl m_Wrapper;
@@ -946,6 +979,7 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_GP_Move;
         public InputAction @Look => m_Wrapper.m_GP_Look;
         public InputAction @Fire => m_Wrapper.m_GP_Fire;
+        public InputAction @Pause => m_Wrapper.m_GP_Pause;
         public InputActionMap Get() { return m_Wrapper.m_GP; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -964,6 +998,9 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
             @Fire.started += instance.OnFire;
             @Fire.performed += instance.OnFire;
             @Fire.canceled += instance.OnFire;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IGPActions instance)
@@ -977,6 +1014,9 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
             @Fire.started -= instance.OnFire;
             @Fire.performed -= instance.OnFire;
             @Fire.canceled -= instance.OnFire;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IGPActions instance)
@@ -1162,6 +1202,7 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

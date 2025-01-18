@@ -40,6 +40,7 @@ system
   - [ ] [A] pause menu, resume button and exit button
 - [ ] game loop
   - [ ] scores ?
+  - [ ] game over
 
 
 

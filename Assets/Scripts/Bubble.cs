@@ -8,7 +8,7 @@ public class Bubble : MonoBehaviour
      , ReadOnly
 #endif
     ]
-    private float _verticalSpeed;
+    protected float _verticalSpeed;
 
     [SerializeField
 #if UNITY_EDITOR
@@ -62,15 +62,20 @@ public class Bubble : MonoBehaviour
 
     private void Floating()
     {
+        CalculateVerticalSpeed();
+        transform.position += _verticalSpeed * Time.fixedDeltaTime * Vector3.up;
+    }
+
+    protected void CalculateVerticalSpeed()
+    {
         if (_scale > GameplaySettings.BubbleScaleThreshold)
         {
             _verticalSpeed = -0.8f * Mathf.Pow(_scale - GameplaySettings.BubbleScaleThreshold, 2);
         }
         else
         {
-            _verticalSpeed = 0.8f / Mathf.Pow(_scale, 2);
+            _verticalSpeed = 0.4f / Mathf.Pow(_scale, 2);
         }
-        transform.position += _verticalSpeed * Time.fixedDeltaTime * Vector3.up;
     }
     
     protected void OnTriggerEnter2D(Collider2D other)
