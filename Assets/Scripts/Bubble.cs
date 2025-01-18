@@ -1,5 +1,5 @@
-using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Bubble : MonoBehaviour
 {
@@ -15,23 +15,30 @@ public class Bubble : MonoBehaviour
      , ReadOnly
 #endif
     ]
-    private float _scale;
+    protected float _scale;
 
     [SerializeField
 #if UNITY_EDITOR
      , ReadOnly
 #endif
     ]
-    private float _expectLifeTime;
+    protected float _initialScale;
 
-    [SerializeField] private float _shrinkRate = 0.1f;
-    [SerializeField] private float _minScale = 0.5f;
+    [SerializeField
+#if UNITY_EDITOR
+     , ReadOnly
+#endif
+    ]
+    protected float _expectLifeTime;
+
+    [SerializeField] protected float _shrinkRate = 0.1f;
+    [SerializeField] protected float _minScale = 0.2f;
 
     public void Awake()
     {
-        _scale = GameplaySettings.BubbleInitialScale;
-
-        _expectLifeTime = (GameplaySettings.BubbleInitialScale - _minScale) / _shrinkRate;
+        _initialScale = Random.Range(GameplaySettings.BubbleInitialScaleMin, GameplaySettings.BubbleInitialScaleMax);
+        _scale = _initialScale;
+        _expectLifeTime = (_initialScale - _minScale) / _shrinkRate;
     }
 
     public void FixedUpdate()
@@ -40,7 +47,7 @@ public class Bubble : MonoBehaviour
         Floating();
     }
 
-    private void Shrink()
+    protected void Shrink()
     {
         _scale -= _shrinkRate * Time.deltaTime;
         if (_scale < _minScale)
@@ -55,7 +62,35 @@ public class Bubble : MonoBehaviour
 
     private void Floating()
     {
-        _verticalSpeed = 1 / math.pow(_scale, 2);
-        transform.position += Vector3.up * _verticalSpeed * Time.fixedDeltaTime;
+        if (_scale > GameplaySettings.BubbleScaleThreshold)
+        {
+            _verticalSpeed = -0.8f * Mathf.Pow(_scale - GameplaySettings.BubbleScaleThreshold, 2);
+        }
+        else
+        {
+            _verticalSpeed = 0.8f / Mathf.Pow(_scale, 2);
+        }
+        transform.position += _verticalSpeed * Time.fixedDeltaTime * Vector3.up;
+    }
+    
+    protected void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Bubble"))
+        {
+            Bubble otherBubble = other.gameObject.GetComponent<Bubble>();
+            if (otherBubble != null && this.enabled && otherBubble.enabled)
+            {
+                MergeBubbles(otherBubble);
+            }
+        }
+    }
+
+    private void MergeBubbles(Bubble otherBubble)
+    {
+        float combinedScale = Mathf.Sqrt(_scale * _scale + otherBubble._scale * otherBubble._scale);
+        _scale = combinedScale > GameplaySettings.BubbleMaxScale ? GameplaySettings.BubbleMaxScale : combinedScale;
+        transform.localScale = new Vector3(_scale, _scale, 1);
+
+        Destroy(otherBubble.gameObject);
     }
 }

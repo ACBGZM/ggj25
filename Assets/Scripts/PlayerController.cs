@@ -1,10 +1,9 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Bubble
 {
     private Rigidbody2D _playerRigidbody2D;
-
     private InputControl _playerInput;
     
     [SerializeField
@@ -18,8 +17,10 @@ public class PlayerController : MonoBehaviour
     private float _speed;
 
 
-    public void Awake()
+    public new void Awake()
     {
+        base.Awake();
+        _initialScale = GameplaySettings.PlayerBubbleInitialScale;
         _playerRigidbody2D = GetComponent<Rigidbody2D>();
 
         _playerInput = new InputControl();
@@ -40,8 +41,11 @@ public class PlayerController : MonoBehaviour
         ProcessInput();
     }
     
-    public void FixedUpdate()
+    public new void FixedUpdate()
     {
+        _expectLifeTime = (_scale - _minScale) / _shrinkRate;
+
+        Shrink();
         PlayerMovement();
     }
     
@@ -50,18 +54,19 @@ public class PlayerController : MonoBehaviour
         _inputMovement = _playerInput.GP.Move.ReadValue<Vector2>();
     }
     
-    
     private void PlayerMovement()
     {
-        if (_inputMovement.x != 0 || _inputMovement.y != 0)
+        float verticalSpeed = 0.3f / math.pow(_scale, 2);
+        
+        if (_inputMovement.x != 0 || verticalSpeed != 0)
         {
             float2 inputMovement = math.normalize(
-                new float2(_inputMovement.x, _inputMovement.y)
+                new float2(_inputMovement.x, verticalSpeed)
             );
             float speed = _speed;
             _playerRigidbody2D.MovePosition(
                 _playerRigidbody2D.position
-                + new Vector2(inputMovement.x, inputMovement.y) * speed * Time.deltaTime
+                + new Vector2(inputMovement.x, verticalSpeed) * speed * Time.deltaTime
             );
 
             if (_inputMovement.x > 0)
@@ -76,5 +81,5 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
+    
 }
