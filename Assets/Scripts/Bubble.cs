@@ -1,8 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using DG.Tweening;
-using Unity.Mathematics;
 
 public class Bubble : MonoBehaviour
 {
@@ -42,7 +43,7 @@ public class Bubble : MonoBehaviour
     
     protected Collider2D _collider2D;
     
-    private SpriteRenderer _spriteRenderer;
+    private List<SpriteRenderer> _spriteRenderers;
 
     protected bool _isMerging = false;
     
@@ -52,7 +53,7 @@ public class Bubble : MonoBehaviour
         _scale = _initialScale;
         _expectLifeTime = (_initialScale - GameplaySettings.BubbleMinScale) / GameplaySettings.BubbleShrinkRate;
      
-        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        _spriteRenderers = GetComponentsInChildren<SpriteRenderer>().ToList();
         _collider2D = GetComponent<Collider2D>();
     }
 
@@ -125,7 +126,7 @@ public class Bubble : MonoBehaviour
 
     public virtual void Burst()
     {
-        _spriteRenderer.DOFade(0, 0.5f);
+        _spriteRenderers.ForEach(r => r.DOFade(0, 0.5f));
         _collider2D.enabled = false;
         this.enabled = false;
 

@@ -63,7 +63,7 @@ others
 - [ ] **art** 
   - [x] [A] bursting effect
   - [x] [A] merging effect
-  - [ ] [A] main menu art
-  - [ ] [A] bubble(player) art
-  - [ ] [B] level art
+  - [x] [A] main menu art
+  - [x] [A] bubble(player) art
+  - [x] [B] level art
   - [ ] [B] audio
