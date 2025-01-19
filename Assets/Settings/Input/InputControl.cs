@@ -62,6 +62,24 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""A"",
+                    ""type"": ""Button"",
+                    ""id"": ""870fd2b1-0bbf-4d32-8e4e-5ce6f3de564c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""B"",
+                    ""type"": ""Button"",
+                    ""id"": ""2b3104f5-457d-43fd-82ed-a157ae8a1a26"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -304,6 +322,28 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bb8478fc-f0bc-42a7-be6d-29f61dcd8cc8"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""A"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b344ae4c-2b3e-48fb-bab3-d0d417bc1d00"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""B"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -895,6 +935,8 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
         m_GP_Look = m_GP.FindAction("Look", throwIfNotFound: true);
         m_GP_Fire = m_GP.FindAction("Fire", throwIfNotFound: true);
         m_GP_Pause = m_GP.FindAction("Pause", throwIfNotFound: true);
+        m_GP_A = m_GP.FindAction("A", throwIfNotFound: true);
+        m_GP_B = m_GP.FindAction("B", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -972,6 +1014,8 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
     private readonly InputAction m_GP_Look;
     private readonly InputAction m_GP_Fire;
     private readonly InputAction m_GP_Pause;
+    private readonly InputAction m_GP_A;
+    private readonly InputAction m_GP_B;
     public struct GPActions
     {
         private @InputControl m_Wrapper;
@@ -980,6 +1024,8 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_GP_Look;
         public InputAction @Fire => m_Wrapper.m_GP_Fire;
         public InputAction @Pause => m_Wrapper.m_GP_Pause;
+        public InputAction @A => m_Wrapper.m_GP_A;
+        public InputAction @B => m_Wrapper.m_GP_B;
         public InputActionMap Get() { return m_Wrapper.m_GP; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1001,6 +1047,12 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @A.started += instance.OnA;
+            @A.performed += instance.OnA;
+            @A.canceled += instance.OnA;
+            @B.started += instance.OnB;
+            @B.performed += instance.OnB;
+            @B.canceled += instance.OnB;
         }
 
         private void UnregisterCallbacks(IGPActions instance)
@@ -1017,6 +1069,12 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @A.started -= instance.OnA;
+            @A.performed -= instance.OnA;
+            @A.canceled -= instance.OnA;
+            @B.started -= instance.OnB;
+            @B.performed -= instance.OnB;
+            @B.canceled -= instance.OnB;
         }
 
         public void RemoveCallbacks(IGPActions instance)
@@ -1203,6 +1261,8 @@ public partial class @InputControl: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnA(InputAction.CallbackContext context);
+        void OnB(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
