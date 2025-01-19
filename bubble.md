@@ -56,12 +56,13 @@ level
 
 others
 
-- [ ] **design** 
-  - [ ] [A] level design
-    - [ ] fixed area
-    - [ ] shorter life
+- [x] **design** 
+  - [x] [A] level design
+    - [x] fixed area
+    - [x] shorter life
 - [ ] **art** 
-  - [ ] [A] bursting animations
+  - [x] [A] bursting effect
+  - [x] [A] merging effect
   - [ ] [A] main menu art
   - [ ] [A] bubble(player) art
   - [ ] [B] level art
