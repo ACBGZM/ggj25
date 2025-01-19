@@ -3,6 +3,7 @@ using UnityEngine;
 public class GameplayManager : MonoBehaviour
 {
     private static GameplayManager _instance;
+    public ParticleSystem BubbleBurstParticlePrefab;
     
     private void Awake()
     {

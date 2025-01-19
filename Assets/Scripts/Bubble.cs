@@ -1,5 +1,8 @@
+using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using DG.Tweening;
+using Unity.Mathematics;
 
 public class Bubble : MonoBehaviour
 {
@@ -31,11 +34,24 @@ public class Bubble : MonoBehaviour
     ]
     protected float _expectLifeTime;
 
+    [SerializeField
+#if UNITY_EDITOR
+     , ReadOnly
+#endif
+    ]
+    
+    protected Collider2D _collider2D;
+    
+    protected SpriteRenderer _spriteRenderer;
+    
     public void Awake()
     {
         _initialScale = Random.Range(GameplaySettings.BubbleInitialScaleMin, GameplaySettings.BubbleInitialScaleMax);
         _scale = _initialScale;
         _expectLifeTime = (_initialScale - GameplaySettings.BubbleMinScale) / GameplaySettings.BubbleShrinkRate;
+     
+        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        _collider2D = GetComponent<Collider2D>();
     }
 
     public void FixedUpdate()
@@ -98,7 +114,24 @@ public class Bubble : MonoBehaviour
 
     public virtual void Burst()
     {
-        // todo: burst effects
+        _spriteRenderer.DOFade(0, 0.5f);
+        _collider2D.enabled = false;
+        this.enabled = false;
+
+        ParticleSystem burstEffect = Instantiate(GameplayManager.GetInstance().BubbleBurstParticlePrefab, transform.position, Quaternion.identity);
+        float scale = Mathf.Min(transform.localScale.x, 1.5f);
+        burstEffect.transform.localScale = new Vector3(scale, scale, 1);
+        burstEffect.Play();
+        Destroy(burstEffect.gameObject, burstEffect.main.duration);
+        
+        StartCoroutine(AfterBurstImpl());
+    }
+
+    protected virtual IEnumerator AfterBurstImpl()
+    {
+        gameObject.SetActive(false);
+        yield return YieldHelper.WaitForSeconds(0.8f);
         Destroy(gameObject);
+        yield return null;
     }
 }

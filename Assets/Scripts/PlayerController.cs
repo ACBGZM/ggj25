@@ -26,8 +26,6 @@ public class PlayerController : Bubble
     ]
     private uint _score;
 
-    [SerializeField] private ParticleSystem _burstEffect;
-    private Material _material;
     
     public new void Awake()
     {
@@ -43,7 +41,6 @@ public class PlayerController : Bubble
     {
         StartCoroutine(UpdateScore());
         
-        _material = GetComponentInChildren<SpriteRenderer>().material;
     }
 
     public void OnEnable()
@@ -109,15 +106,7 @@ public class PlayerController : Bubble
         _uiLogic.UpdatePlayerInfo($"score: +{_scale * _scale:F1}\nlife: {_expectLifeTime:F1}");
     }
 
-    public override void Burst()
-    {
-        _material.DOFloat(-1.0f, "_Strength", 1.0f);
-        _burstEffect.Play();
-
-        StartCoroutine(GameOverImpl());
-    }
-
-    private IEnumerator GameOverImpl()
+    protected override IEnumerator AfterBurstImpl()
     {
         yield return YieldHelper.WaitForSeconds(1.0f);
         GameplayManager.GetInstance().IsGameOver = true;
