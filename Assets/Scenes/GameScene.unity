@@ -677,6 +677,55 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &169312318
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 169312320}
+  - component: {fileID: 169312321}
+  m_Layer: 0
+  m_Name: AudioPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &169312320
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169312318}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1123.8462, y: 865.67773, z: -4.344345}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &169312321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169312318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d2811811d0dce7499a554b8ac96cbb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgmClip: {fileID: 8300000, guid: 33aef5a2ed9f2254eb3e26c1161be976, type: 3}
+  soundEffects:
+  - {fileID: 8300000, guid: 80cbebc65892ace479ba518537b410de, type: 3}
+  - {fileID: 8300000, guid: f5c4ba2b889b7714692457447bafb493, type: 3}
+  - {fileID: 8300000, guid: 71f8e47db94ccb34b861f97c7df4191d, type: 3}
 --- !u!1 &266344071
 GameObject:
   m_ObjectHideFlags: 0
@@ -2742,6 +2791,8 @@ MonoBehaviour:
   _initialScale: 0
   _expectLifeTime: 0
   _collider2D: {fileID: 0}
+  _mergeAudioClip: {fileID: 8300000, guid: 80cbebc65892ace479ba518537b410de, type: 3}
+  _burstAudioClip: {fileID: 8300000, guid: 123c6a82add368d46a87dfeac3c29bc3, type: 3}
   _uiLogic: {fileID: 1639220926}
   _inputMovement: {x: 0, y: 0}
   _score: 0
@@ -2913,10 +2964,10 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 5, y: 6.6}
+    - - {x: 4.9, y: 6.6}
       - {x: -5, y: 6.6}
-      - {x: -5, y: -6.6}
-      - {x: 5, y: -6.6}
+      - {x: -5, y: -7}
+      - {x: 4.9, y: -7}
   m_UseDelaunayMesh: 0
 --- !u!1 &1237345919
 GameObject:
@@ -4403,3 +4454,4 @@ SceneRoots:
   - {fileID: 1639220925}
   - {fileID: 473225416}
   - {fileID: 275223248}
+  - {fileID: 169312320}

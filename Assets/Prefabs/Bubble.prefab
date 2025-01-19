@@ -171,6 +171,8 @@ MonoBehaviour:
   _initialScale: 0
   _expectLifeTime: 0
   _collider2D: {fileID: 0}
+  _mergeAudioClip: {fileID: 8300000, guid: 71f8e47db94ccb34b861f97c7df4191d, type: 3}
+  _burstAudioClip: {fileID: 8300000, guid: f5c4ba2b889b7714692457447bafb493, type: 3}
 --- !u!50 &5278018228720079797
 Rigidbody2D:
   serializedVersion: 4

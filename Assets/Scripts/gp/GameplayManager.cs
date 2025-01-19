@@ -27,5 +27,6 @@ public class GameplayManager : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 60;
+        SoundManager.Instance.PlayBGM(SoundManager.Instance.bgmClip);
     }
 }

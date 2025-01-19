@@ -46,6 +46,9 @@ public class Bubble : MonoBehaviour
     private List<SpriteRenderer> _spriteRenderers;
 
     protected bool _isMerging = false;
+
+    [SerializeField] private AudioClip _mergeAudioClip;
+    [SerializeField] private AudioClip _burstAudioClip;
     
     public void Awake()
     {
@@ -118,6 +121,8 @@ public class Bubble : MonoBehaviour
         
         Destroy(otherBubble.gameObject);
 
+        SoundManager.Instance.PlaySFX(_mergeAudioClip);
+        
         transform.DOScale(new Vector3(_scale, _scale, 1), 0.75f).OnComplete(() =>
         {
             _isMerging = false;
@@ -135,6 +140,8 @@ public class Bubble : MonoBehaviour
         burstEffect.transform.localScale = new Vector3(scale, scale, 1);
         burstEffect.Play();
         Destroy(burstEffect.gameObject, burstEffect.main.duration);
+        
+        SoundManager.Instance.PlaySFX(_burstAudioClip);
         
         StartCoroutine(AfterBurstImpl());
     }
