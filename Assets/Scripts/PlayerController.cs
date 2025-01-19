@@ -1,6 +1,4 @@
 using System.Collections;
-using DG.Tweening;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,7 +28,6 @@ public class PlayerController : Bubble
     public new void Awake()
     {
         base.Awake();
-        _initialScale = GameplaySettings.PlayerBubbleInitialScale;
         _playerRigidbody2D = GetComponent<Rigidbody2D>();
 
         _playerInput = new InputControl();
@@ -40,7 +37,10 @@ public class PlayerController : Bubble
     private void Start()
     {
         StartCoroutine(UpdateScore());
-        
+        transform.localScale = new Vector3(GameplaySettings.PlayerBubbleInitialScale,
+            GameplaySettings.PlayerBubbleInitialScale, 1);
+
+
     }
 
     public void OnEnable()
@@ -63,8 +63,11 @@ public class PlayerController : Bubble
     public new void FixedUpdate()
     {
         _expectLifeTime = (_scale - GameplaySettings.BubbleMinScale) / GameplaySettings.BubbleShrinkRate;
+        if (!_isMerging)
+        {
+            Shrink();
+        }
 
-        Shrink();
         PlayerMovement();
     }
 
@@ -84,7 +87,7 @@ public class PlayerController : Bubble
             return;
         }
 
-        Vector2 inputMovement = new Vector2(_inputMovement.x, _verticalSpeed).normalized;
+        Vector2 inputMovement = new Vector2(_inputMovement.x * 2, _verticalSpeed).normalized;
         float verticalIndex = Mathf.Clamp01(_scale - GameplaySettings.BubbleScaleThreshold) + 1;
         
         _playerRigidbody2D.MovePosition(
@@ -92,6 +95,7 @@ public class PlayerController : Bubble
             + Time.deltaTime * new Vector2(verticalIndex * GameplaySettings.PlayerHorizontalSpeed * inputMovement.x, _verticalSpeed)
         );
 
+        /*
         if (_inputMovement.x > 0)
         {
             transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y,
@@ -102,8 +106,9 @@ public class PlayerController : Bubble
             transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y,
                 transform.localScale.z);
         }
+        */
 
-        _uiLogic.UpdatePlayerInfo($"score: +{_scale * _scale:F1}\nlife: {_expectLifeTime:F1}");
+        _uiLogic.UpdatePlayerInfo($"score: +{(uint)Mathf.CeilToInt(_scale * _scale)}\nlife: {_expectLifeTime:F1}");
     }
 
     protected override IEnumerator AfterBurstImpl()

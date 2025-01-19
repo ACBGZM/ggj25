@@ -313,6 +313,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35597fee38b7ef84bbf808e906693029, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsMovable: 0
+  _positionA: {x: 0, y: 0, z: 0}
+  _positionB: {x: 0, y: 0, z: 0}
+  _moveDuration: 2
 --- !u!61 &25109031
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -719,6 +723,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35597fee38b7ef84bbf808e906693029, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsMovable: 0
+  _positionA: {x: 0, y: 0, z: 0}
+  _positionB: {x: 0, y: 0, z: 0}
+  _moveDuration: 2
 --- !u!61 &266344074
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1597,6 +1605,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35597fee38b7ef84bbf808e906693029, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsMovable: 0
+  _positionA: {x: 0, y: 0, z: 0}
+  _positionB: {x: 0, y: 0, z: 0}
+  _moveDuration: 2
 --- !u!61 &565044583
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3066,8 +3078,8 @@ Transform:
   m_GameObject: {fileID: 1288813968}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.21592835, w: 0.9764092}
-  m_LocalPosition: {x: -3.94, y: 8, z: 0.07521898}
-  m_LocalScale: {x: 0.6000001, y: 0.6000001, z: 0.6}
+  m_LocalPosition: {x: -0.11, y: 0.68, z: 0.07521898}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 275223248}
@@ -3181,6 +3193,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35597fee38b7ef84bbf808e906693029, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsMovable: 1
+  _positionA: {x: -4, y: -2.91, z: 0}
+  _positionB: {x: 4, y: 3.18, z: 0}
+  _moveDuration: 5
 --- !u!1 &1339158728
 GameObject:
   m_ObjectHideFlags: 0
@@ -4086,6 +4102,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35597fee38b7ef84bbf808e906693029, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsMovable: 0
+  _positionA: {x: 0, y: 0, z: 0}
+  _positionB: {x: 0, y: 0, z: 0}
+  _moveDuration: 2
 --- !u!61 &2105819763
 BoxCollider2D:
   m_ObjectHideFlags: 0

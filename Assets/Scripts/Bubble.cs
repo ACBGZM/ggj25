@@ -42,7 +42,9 @@ public class Bubble : MonoBehaviour
     
     protected Collider2D _collider2D;
     
-    protected SpriteRenderer _spriteRenderer;
+    private SpriteRenderer _spriteRenderer;
+
+    protected bool _isMerging = false;
     
     public void Awake()
     {
@@ -56,8 +58,11 @@ public class Bubble : MonoBehaviour
 
     public void FixedUpdate()
     {
-        Shrink();
-        Floating();
+        if (!_isMerging)
+        {
+            Shrink();
+            Floating();
+        }
     }
 
     protected void Shrink()
@@ -105,11 +110,17 @@ public class Bubble : MonoBehaviour
 
     private void MergeBubbles(Bubble otherBubble)
     {
+        _isMerging = true;
+        
         float combinedScale = Mathf.Sqrt(_scale * _scale + otherBubble._scale * otherBubble._scale);
         _scale = combinedScale > GameplaySettings.BubbleMaxScale ? GameplaySettings.BubbleMaxScale : combinedScale;
-        transform.localScale = new Vector3(_scale, _scale, 1);
-
+        
         Destroy(otherBubble.gameObject);
+
+        transform.DOScale(new Vector3(_scale, _scale, 1), 0.75f).OnComplete(() =>
+        {
+            _isMerging = false;
+        });
     }
 
     public virtual void Burst()
