@@ -148,7 +148,7 @@ public class Bubble : MonoBehaviour
 
     protected virtual IEnumerator AfterBurstImpl()
     {
-        gameObject.SetActive(false);
+        // gameObject.SetActive(false);
         yield return YieldHelper.WaitForSeconds(0.8f);
         Destroy(gameObject);
         yield return null;

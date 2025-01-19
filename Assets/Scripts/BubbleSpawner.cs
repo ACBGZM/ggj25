@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class BubbleSpawner : MonoBehaviour
 {
@@ -11,6 +10,8 @@ public class BubbleSpawner : MonoBehaviour
     
     [SerializeField] private Transform _playerTransform;
 
+    public bool IsSetBubbleAlpha;
+    
     private void Start()
     {
         StartCoroutine(SpawnBubbles());
@@ -40,7 +41,19 @@ public class BubbleSpawner : MonoBehaviour
             distance = Vector2.Distance(spawnPosition, _playerTransform.position);
         } while (distance < GameplaySettings.BubbleSpawnMinDistance);
         
-        Instantiate(_bubblePrefab, spawnPosition, Quaternion.identity);
+        GameObject bubble = Instantiate(_bubblePrefab, spawnPosition, Quaternion.identity);
+        
+        // hack
+        if (IsSetBubbleAlpha)
+        {
+            SpriteRenderer spriteRenderer = bubble.GetComponentInChildren<SpriteRenderer>();
+            if (spriteRenderer != null)
+            {
+                Color color = spriteRenderer.color;
+                color.a = 1.0f;
+                spriteRenderer.color = color;
+            }
+        }
     }
 
     private void OnDrawGizmos()
